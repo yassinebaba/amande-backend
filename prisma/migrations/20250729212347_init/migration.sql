@@ -1,6 +1,6 @@
 -- CreateTable
 CREATE TABLE "Reservation" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "idReservation" TEXT NOT NULL,
     "nom" TEXT NOT NULL,
     "email" TEXT,
@@ -10,14 +10,18 @@ CREATE TABLE "Reservation" (
     "estheticienne" TEXT NOT NULL,
     "service" TEXT NOT NULL,
     "commentaire" TEXT,
-    "statut" TEXT NOT NULL DEFAULT 'En cours'
+    "statut" TEXT NOT NULL DEFAULT 'En cours',
+
+    CONSTRAINT "Reservation_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateTable
 CREATE TABLE "Admin" (
-    "id" INTEGER NOT NULL PRIMARY KEY AUTOINCREMENT,
+    "id" SERIAL NOT NULL,
     "email" TEXT NOT NULL,
-    "password" TEXT NOT NULL
+    "password" TEXT NOT NULL,
+
+    CONSTRAINT "Admin_pkey" PRIMARY KEY ("id")
 );
 
 -- CreateIndex
