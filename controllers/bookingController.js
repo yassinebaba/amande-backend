@@ -1,5 +1,6 @@
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
+import { sendConfirmationEmail } from "../mailer.js"; // ✅ Ajouté
 
 const prisma = new PrismaClient();
 
@@ -57,13 +58,23 @@ export const createBooking = async (req, res) => {
       },
     });
 
+    // ✅ Envoi de l’e-mail de confirmation
+    await sendConfirmationEmail({
+      nom,
+      email,
+      date: selectedDate,
+      heure,
+      service,
+      estheticienne,
+      idReservation,
+    });
+
     res.status(200).json(newBooking);
   } catch (error) {
     console.error("Erreur lors de la création de la réservation:", error);
     res.status(500).json({ error: "Erreur serveur." });
   }
 };
-
 
 export const getOccupiedEstheticiennes = async (req, res) => {
   try {
@@ -89,7 +100,6 @@ export const getOccupiedEstheticiennes = async (req, res) => {
     res.status(500).json({ error: "Erreur serveur." });
   }
 };
-
 
 export const updateBookingStatus = async (req, res) => {
   try {
