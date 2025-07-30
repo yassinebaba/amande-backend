@@ -21,6 +21,13 @@ export const sendConfirmationEmail = async (reservationData) => {
     idReservation,
   } = reservationData;
 
+  const formattedDate = new Date(date).toLocaleDateString("fr-FR", {
+  weekday: "long",
+  year: "numeric",
+  month: "long",
+  day: "numeric",
+});
+
   const mailOptions = {
     from: `"Amande Douce" <amandedouce47@gmail.com>`, // ✅ CORRIGÉ ICI
     to: email,
