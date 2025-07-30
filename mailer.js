@@ -57,3 +57,5 @@ export const sendConfirmationEmail = async (reservationData) => {
     console.error("Erreur d'envoi de l'email :", error);
   }
 };
+
+// Force redeploiement Railway - 30 juillet
