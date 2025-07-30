@@ -46,7 +46,8 @@ export const sendConfirmationEmail = async (reservationData) => {
             <table width="600" cellpadding="0" cellspacing="0" style="background-color:#fff9f9;">
               <tr>
                 <td align="center" style="padding:20px;">
-                  <img src="https://amande-backend-production.up.railway.app/logo.png" alt="Logo Amande Douce" style="width:240px;" />
+                  <img src="https://amande-backend-production.up.railway.app/logo.png" alt="Logo Amande Douce" />
+
                 </td>
               </tr>
               <tr>
