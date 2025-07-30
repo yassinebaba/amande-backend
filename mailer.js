@@ -22,7 +22,7 @@ export const sendConfirmationEmail = async (reservationData) => {
   } = reservationData;
 
   const mailOptions = {
-    from: `"Amande Douce" <${process.env.BREVO_SMTP_USER}>`,
+    from: `"Amande Douce" <amandedouce47@gmail.com>`, // ✅ CORRIGÉ ICI
     to: email,
     subject: `✅ Confirmation de votre réservation – Amande Douce [ID: ${idReservation}]`,
     html: `
