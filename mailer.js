@@ -50,5 +50,10 @@ export const sendConfirmationEmail = async (reservationData) => {
     `,
   };
 
-  await transporter.sendMail(mailOptions);
+  try {
+    const info = await transporter.sendMail(mailOptions);
+    console.log("E-mail envoyé avec succès :", info.response);
+  } catch (error) {
+    console.error("Erreur d'envoi de l'email :", error);
+  }
 };
