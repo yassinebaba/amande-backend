@@ -35,6 +35,26 @@ router.get("/bookings", async (req, res) => {
   }
 });
 
+// ✅ PATCH pour changer le statut d'une réservation
+router.patch("/book/:id", async (req, res) => {
+  const { id } = req.params;
+  const { statut } = req.body;
+
+  if (!statut) {
+    return res.status(400).json({ error: "Nouveau statut requis" });
+  }
+
+  try {
+    const reservation = await prisma.reservation.update({
+      where: { idReservation: id },
+      data: { statut },
+    });
+
+    res.json(reservation);
+  } catch (err) {
+    console.error("Erreur PATCH /book/:id:", err);
+    res.status(404).json({ error: "Réservation introuvable ou erreur de mise à jour" });
+  }
+});
+
 export default router;
-
-
