@@ -3,7 +3,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
-import { verifyAdmin } from "../middlewares/authMiddleware.js"; // ✅ protection PATCH
+import { verifyAdmin } from "../middlewares/authMiddleware.js";
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -22,7 +22,7 @@ router.get("/bookings", async (req, res) => {
         date,
         heure: time,
         statut: {
-          not: "Annulé", // ✅ Seules les réservations actives sont comptées
+          not: "Annulé",
         },
       },
       select: {
@@ -38,7 +38,7 @@ router.get("/bookings", async (req, res) => {
   }
 });
 
-// ✅ PATCH pour changer le statut d'une réservation (protégé)
+// ✅ Modifier le statut d'une réservation (protégé)
 router.patch("/book/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const { statut } = req.body;
@@ -60,7 +60,7 @@ router.patch("/book/:id", verifyAdmin, async (req, res) => {
   }
 });
 
-// ✅ POST pour créer une réservation
+// ✅ Créer une nouvelle réservation
 router.post("/book", async (req, res) => {
   const {
     nom,
@@ -78,7 +78,6 @@ router.post("/book", async (req, res) => {
   }
 
   try {
-    // Vérifier le nombre de réservations à cette date/heure
     const existing = await prisma.reservation.findMany({
       where: { date, heure, statut: { not: "Annulé" } },
     });
@@ -92,7 +91,6 @@ router.post("/book", async (req, res) => {
       return res.status(400).json({ error: `L'esthéticienne ${estheticienne} est déjà réservée` });
     }
 
-    // Générer ID de type ADJJMMYYYY-N
     const today = dayjs(date).format("DDMMYYYY");
     const sameDayCount = await prisma.reservation.count({
       where: { idReservation: { startsWith: `AD${today}` } },
