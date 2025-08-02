@@ -1,26 +1,40 @@
-// backend/routes/book.js
-
 import express from "express";
-import {
-  createBooking,
-  getOccupiedEstheticiennes,
-  updateBookingStatus,
-} from "../controllers/bookingController.js";
-import { verifyAdmin } from "../middlewares/authMiddleware.js";
+import { PrismaClient } from "@prisma/client";
+import dayjs from "dayjs";
 
 const router = express.Router();
+const prisma = new PrismaClient();
 
-// POST /api/book
-router.post("/book", createBooking);
+// 🔄 Récupérer les esthéticiennes occupées à une date + heure données
+router.get("/bookings", async (req, res) => {
+  const { date, time } = req.query;
 
-// GET /api/bookings?date=YYYY-MM-DD&time=HH:mm
-router.get("/bookings", getOccupiedEstheticiennes);
+  if (!date || !time) {
+    return res.status(400).json({ error: "Date et heure requises" });
+  }
 
-// PATCH /api/book/:id → admin uniquement
-router.patch("/book/:id", verifyAdmin, updateBookingStatus);
+  try {
+    const reservations = await prisma.reservation.findMany({
+      where: {
+        date,
+        heure: time,
+        statut: {
+          not: "Annulé", // ✅ Seules les réservations actives sont comptées
+        },
+      },
+      select: {
+        estheticienne: true,
+      },
+    });
+
+    const occupied = reservations.map((r) => r.estheticienne);
+    res.json(occupied);
+  } catch (err) {
+    console.error("Erreur GET /bookings:", err);
+    res.status(500).json({ error: "Erreur serveur" });
+  }
+});
 
 export default router;
-
-
 
 
