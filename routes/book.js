@@ -3,6 +3,7 @@
 import express from "express";
 import { PrismaClient } from "@prisma/client";
 import dayjs from "dayjs";
+import { verifyAdmin } from "../middlewares/authMiddleware.js"; // ✅ protection PATCH
 
 const router = express.Router();
 const prisma = new PrismaClient();
@@ -37,8 +38,8 @@ router.get("/bookings", async (req, res) => {
   }
 });
 
-// ✅ PATCH pour changer le statut d'une réservation
-router.patch("/book/:id", async (req, res) => {
+// ✅ PATCH pour changer le statut d'une réservation (protégé)
+router.patch("/book/:id", verifyAdmin, async (req, res) => {
   const { id } = req.params;
   const { statut } = req.body;
 
